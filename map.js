@@ -1,36 +1,10 @@
-const heat = "./heatVulnerability.geojson";
-function map_range(value, low1, high1, low2, high2) {
-  return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
-}
-
-const panel = document.getElementById("panel");
-const panelChild = document.querySelector("#panel :nth-child(2)");
-
-document.addEventListener("contextmenu", (event) => event.preventDefault());
-
-function hidePanel() {
-  document.getElementById("panel").style.opacity = 0;
-}
+document.addEventListener("contextmenu", (event) => event.preventDefault()); //disable right click for map
 
 fetch(
-  "https://phl.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM public_cases_fc WHERE requested_datetime >= current_date - 7"
+  "https://phl.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM public_cases_fc WHERE requested_datetime >= current_date - 30"
 )
   .then((response) => response.json())
   .then((data) => {
-    function flyToClick(coords) {
-      deckgl.setProps({
-        initialViewState: {
-          longitude: coords[0],
-          latitude: coords[1],
-          zoom: 13,
-          bearing: 0,
-          pitch: 0,
-          transitionDuration: 500,
-          transitionInterpolator: new deck.FlyToInterpolator(),
-        },
-      });
-    }
-
     const philly311 = data.features.filter(
       (d) => d.geometry !== null && d.properties.status === "Open"
     );
@@ -72,7 +46,6 @@ fetch(
             [129, 15, 124],
           ],
           onClick: (info) => {
-            console.log(info);
             flyToClick(info.object.position);
 
             const report = {};
@@ -112,4 +85,21 @@ fetch(
         }
       },
     });
+
+    function flyToClick(coords) {
+      deckgl.setProps({
+        initialViewState: {
+          longitude: coords[0],
+          latitude: coords[1],
+          zoom: 13,
+          bearing: 0,
+          pitch: 0,
+          transitionDuration: 500,
+          transitionInterpolator: new deck.FlyToInterpolator(),
+        },
+      });
+    }
+    function hidePanel() {
+      document.getElementById("panel").style.opacity = 0;
+    }
   });
