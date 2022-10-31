@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <!-- deck.gl standalone bundle -->
+    <script src="https://unpkg.com/deck.gl@^8.8.0/dist.min.js"></script>
+
+    <!-- Mapbox dependencies -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.13.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./style.css" />
+    <title>API Philly</title>
+  </head>
+
+  <body>
+    <script>
+      // function to exit the panel on click
+      function hidePanel() {
+        document.getElementById("panel").style.opacity = 0;
+      }
+    </script>
+    <!-- map container that map.js points towards -->
+    <div id="map"></div>
+
+    <!-- panel and hover tooltip that update by map interaction -->
+    <tooltip id="panel"
+      ><div class="exit" onclick="hidePanel()">X</div>
+      <div></div>
+    </tooltip>
+    <script src="./map.js"></script>
+  </body>
+</html>
