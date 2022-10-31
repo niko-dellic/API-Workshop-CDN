@@ -68,7 +68,7 @@ fetch(
             document.querySelector("#complaints")?.remove();
             const complaintsDiv = document.createElement("div");
             complaintsDiv.id = "complaints";
-            complaintsDiv.innerHTML = `<h3>Complaints</h3><p>${serviceSentence}</p>`;
+            complaintsDiv.innerHTML = `<h3>311 complaints in Philadelphia in the last 30 days</h3><p>${serviceSentence}</p>`;
             panel.appendChild(complaintsDiv);
           },
         }),
