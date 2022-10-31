@@ -8,6 +8,10 @@ const panelChild = document.querySelector("#panel :nth-child(2)");
 
 document.addEventListener("contextmenu", (event) => event.preventDefault());
 
+function hidePanel() {
+  document.getElementById("panel").style.opacity = 0;
+}
+
 fetch(
   "https://phl.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM public_cases_fc WHERE requested_datetime >= current_date - 7"
 )
@@ -79,6 +83,14 @@ fetch(
               serviceSentence = [...new Set(Object.values(report))].join(", ");
             });
             panel.style.opacity = 1;
+
+            if (!document.querySelector("#exit")) {
+              const exit = document.createElement("div");
+              exit.id = "exit";
+              exit.innerHTML = "X";
+              exit.addEventListener("click", hidePanel);
+              panel.appendChild(exit);
+            }
 
             document.querySelector("#complaints")?.remove();
             const complaintsDiv = document.createElement("div");

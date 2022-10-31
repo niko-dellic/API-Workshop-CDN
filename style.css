@@ -24,7 +24,7 @@ body {
     width: 25%;
 }
 
-.exit {
+#exit {
     cursor: pointer;
     margin-bottom: 1rem;
     padding: 0.35rem;

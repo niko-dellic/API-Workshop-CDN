@@ -15,20 +15,10 @@
   </head>
 
   <body>
-    <script>
-      // function to exit the panel on click
-      function hidePanel() {
-        document.getElementById("panel").style.opacity = 0;
-      }
-    </script>
     <!-- map container that map.js points towards -->
     <div id="map"></div>
-
     <!-- panel and hover tooltip that update by map interaction -->
-    <tooltip id="panel"
-      ><div class="exit" onclick="hidePanel()">X</div>
-      <div></div>
-    </tooltip>
+    <tooltip id="panel"></tooltip>
     <script src="./map.js"></script>
   </body>
 </html>
