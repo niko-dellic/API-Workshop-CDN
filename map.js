@@ -6,6 +6,8 @@ function map_range(value, low1, high1, low2, high2) {
 const panel = document.getElementById("panel");
 const panelChild = document.querySelector("#panel :nth-child(2)");
 
+document.addEventListener("contextmenu", (event) => event.preventDefault());
+
 fetch(
   "https://phl.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM public_cases_fc WHERE requested_datetime >= current_date - 7"
 )
