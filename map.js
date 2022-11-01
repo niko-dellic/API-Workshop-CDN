@@ -1,7 +1,7 @@
 document.addEventListener("contextmenu", (event) => event.preventDefault()); //disable right click for map
 
 fetch(
-  "https://phl.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM public_cases_fc WHERE requested_datetime >= current_date - 30"
+  "https://phl.carto.com/api/v2/sql?format=GeoJSON&q=SELECT * FROM public_cases_fc WHERE requested_datetime >= current_date - 7"
 )
   .then((response) => response.json())
   .then((data) => {
@@ -26,80 +26,20 @@ fetch(
       controller: true,
 
       layers: [
-        new deck.HexagonLayer({
-          id: "hex-311", // layer id
+        new deck.ScatterplotLayer({
+          id: "points-311", // layer id
           data: philly311, // data formatted as array of objects
-          // Styles
-          extruded: true,
-          radius: 200,
-          elevationScale: 4,
           getPosition: (d) => d.geometry.coordinates, // coordinates [lng, lat] for each data point
-          pickable: true, // enable picking
-          autoHighlight: true, // highlight on hover
-          highlightColor: [255, 255, 255, 200], // highlight color
-          colorRange: [
-            [237, 248, 251],
-            [191, 211, 230],
-            [158, 188, 218],
-            [140, 150, 198],
-            [136, 86, 167],
-            [129, 15, 124],
-          ],
-          onClick: (info) => {
-            flyToClick(info.object.position);
-
-            const report = {};
-            let serviceSentence = "";
-            info.object.points.forEach((element) => {
-              report[element.source.properties.service_request_id] =
-                element.source.properties.service_name;
-              serviceSentence = [...new Set(Object.values(report))].join(", ");
-            });
-            panel.style.opacity = 1;
-
-            if (!document.querySelector("#exit")) {
-              const exit = document.createElement("div");
-              exit.id = "exit";
-              exit.innerHTML = "X";
-              exit.addEventListener("click", hidePanel);
-              panel.appendChild(exit);
-            }
-
-            document.querySelector("#complaints")?.remove();
-            const complaintsDiv = document.createElement("div");
-            complaintsDiv.id = "complaints";
-            complaintsDiv.innerHTML = `<h3>311 complaints in Philadelphia in the last 30 days</h3><p>${serviceSentence}</p>`;
-            panel.appendChild(complaintsDiv);
-          },
+          // Styles
+          opacity: 0.7,
+          stroked: false,
+          filled: true,
+          radiusScale: 20,
+          radiusMinPixels: 2,
+          radiusMaxPixels: 50,
+          lineWidthMinPixels: 1,
+          getFillColor: [255, 255, 255],
         }),
       ],
-
-      getTooltip: ({ object }) => {
-        if (object) {
-          return (
-            object && {
-              html: `${object.points.length} complaints in this hexagon.`,
-              style: { maxWidth: "300px", backgroundColor: "black" },
-            }
-          );
-        }
-      },
     });
-
-    function flyToClick(coords) {
-      deckgl.setProps({
-        initialViewState: {
-          longitude: coords[0],
-          latitude: coords[1],
-          zoom: 13,
-          bearing: 0,
-          pitch: 0,
-          transitionDuration: 500,
-          transitionInterpolator: new deck.FlyToInterpolator(),
-        },
-      });
-    }
-    function hidePanel() {
-      document.getElementById("panel").style.opacity = 0;
-    }
   });
